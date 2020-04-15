@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "779725413490",
+    "firebase_url": "https://firstfire-f0b06.firebaseio.com",
+    "project_id": "firstfire-f0b06",
+    "storage_bucket": "firstfire-f0b06.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:779725413490:android:112fe3340611d0c39536eb",
+        "android_client_info": {
+          "package_name": "com.streamapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "779725413490-v8868iph9smkcqs17hil1605innpd8qp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD20FONwROlvINk0FLVLmXWaImXOyyjaVE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "779725413490-v8868iph9smkcqs17hil1605innpd8qp.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
