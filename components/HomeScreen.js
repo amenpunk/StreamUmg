@@ -19,6 +19,7 @@ const settings = {
 
 export default class HomeScreen extends Component {
     state = {
+        name : "",
         email : "",
         displayName : "",
 		admin: false,
@@ -143,8 +144,8 @@ export default class HomeScreen extends Component {
 
 
     componentDidMount() {
-        const { email,displayName} = firebase.auth().currentUser;
-        this.setState({email,displayName});
+        const { email,displayName, name} = firebase.auth().currentUser;
+        this.setState({email,displayName,name});
     }
 
     signOutUser = () =>{
@@ -152,16 +153,6 @@ export default class HomeScreen extends Component {
     }
 
     render(){
-        /*
-        return (
-            <View style={styles.container}>
-                <Text>Hola, {this.state.email}!</Text>
-                <TouchableOpacity style={styles.buton} onPress={this.signOutUser}>
-                    <Text>Salir</Text>
-                </TouchableOpacity>
-            </View>
-        )
-        */
 		const {admin, paused, isPublishing} = this.state;
 		return (
 			<View style={styles.container}>
@@ -187,12 +178,20 @@ export default class HomeScreen extends Component {
 					</TouchableOpacity>
 				)}
 
+                <View>
+                    <Text>Hola, {this.state.displayName || this.state.email}!</Text>
+                    <TouchableOpacity style={styles.buton} onPress={this.signOutUser}>
+                        <Text>Salir</Text>
+                    </TouchableOpacity>
+                </View>
+
+
 				<TouchableOpacity
 					style={styles.adminBtnContainer}
 					onPress={this.onPressAdminBtn}>
 					<View style={styles.adminBtn}>
 						<Text style={styles.btnText}>
-							{admin ? 'VIEW USER' : 'VIEW ADMIN'}
+							{admin ? 'USER' : 'ADMIN'}
 						</Text>
 					</View>
 				</TouchableOpacity>
@@ -205,14 +204,15 @@ export default class HomeScreen extends Component {
 const styles = StyleSheet.create({
     container : {
         flex : 1,
-		backgroundColor: '#000',
+		backgroundColor: '#FFFFFF',
 		justifyContent: 'center',
         alignItems: "center"
-    },buton : { marginTop : 32,
+    },buton : { 
+        marginTop : 32,
         marginHorizontal :30,
-        backgroundColor : "#E9446A",
+        backgroundColor : "#0d8d9e",
         borderRadius : 4,
-        height : 52,
+        height : 30,
         alignItems : "center",
         justifyContent : "center",
         marginTop : 30
@@ -235,8 +235,8 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 		alignItems: 'center',
 		alignSelf: 'center',
-		backgroundColor: '#333',
-		borderColor: '#333',
+		backgroundColor: '#ff1100',
+		borderColor: '#ff1100',
 		borderWidth: 3,
 		borderRadius: 2,
 		height: 50,
