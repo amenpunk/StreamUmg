@@ -1273,6 +1273,14 @@
     query-string "^6.11.1"
     react-is "^16.13.0"
 
+"@react-navigation/drawer@^5.5.1":
+  version "5.5.1"
+  resolved "https://registry.yarnpkg.com/@react-navigation/drawer/-/drawer-5.5.1.tgz#f18da67b8528466d4aafd4e1f92b8b8e06c6f26d"
+  integrity sha512-LYgaS7bzyg6vphDLChQlUcyq3UmHl9OJlZa6HFogiZzNVW5pqNbJC5qUlL8Gw8pcH1FpJTUGW6/w4lKOxIGY5w==
+  dependencies:
+    color "^3.1.2"
+    react-native-iphone-x-helper "^1.2.1"
+
 "@react-navigation/native@^3.7.11":
   version "3.7.11"
   resolved "https://registry.yarnpkg.com/@react-navigation/native/-/native-3.7.11.tgz#00aa5d8187b346b16a5d2e9d1e32413c78bc4ad4"

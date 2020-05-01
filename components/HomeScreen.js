@@ -49,7 +49,7 @@ export default class HomeScreen extends Component {
     renderPlayerView = () => {
 		const {paused} = this.state;
 		const source = {
-			uri: 'https://stream.mux.com/PLAYBACK_ID_HERE.m3u8',
+            uri: 'http://192.168.0.13:8000/live/STREAM_NAME/index.m3u8',
 		};
 		return (
 			<Video
@@ -90,8 +90,7 @@ export default class HomeScreen extends Component {
 				ref={vb => {
 					this.vb = vb;
 				}}
-				/* eslint-enable */
-				outputUrl="rtmp://40.122.152.174/live"
+                outputUrl="rtmp://40.122.152.174/live/STREAM_NAME?sign=1903744798-dedca6058f361ce27fad457f658365fd"
 				camera={settings.camera}
 				audio={settings.audio}
 				video={settings.video}
@@ -180,10 +179,13 @@ export default class HomeScreen extends Component {
 
                 <View>
                     <Text>Hola, {this.state.displayName || this.state.email}!</Text>
-                    <TouchableOpacity style={styles.buton} onPress={this.signOutUser}>
-                        <Text>Salir</Text>
+                    <TouchableOpacity style={styles.buton} onPress={ () => this.props.navigation.navigate("Register")} >
+                        <Text>Mi perfil</Text>
                     </TouchableOpacity>
                 </View>
+                <TouchableOpacity style={styles.buton} onPress={this.signOutUser}>
+                    <Text>Salir</Text>
+                </TouchableOpacity>
 
 
 				<TouchableOpacity
@@ -204,7 +206,7 @@ export default class HomeScreen extends Component {
 const styles = StyleSheet.create({
     container : {
         flex : 1,
-		backgroundColor: '#FFFFFF',
+// backgroundColor: '#FFFFFF',
 		justifyContent: 'center',
         alignItems: "center"
     },buton : { 
