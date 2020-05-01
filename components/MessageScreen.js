@@ -18,7 +18,6 @@ export default class MessageScreen extends Component {
                 </Text>
                 <Image style={styles.image} 
                     source={{uri:'https://icons-for-free.com/iconfiles/png/512/complete+done+green+success+valid+icon-1320183462969251652.png' }} />
-             
             </View>
         )
     }
