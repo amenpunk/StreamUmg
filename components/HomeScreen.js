@@ -179,14 +179,14 @@ export default class HomeScreen extends Component {
 
                 <View>
                     <Text>Hola, {this.state.displayName || this.state.email}!</Text>
-                    <TouchableOpacity style={styles.buton} onPress={ () => this.props.navigation.navigate("Register")} >
-                        <Text>Mi perfil</Text>
-                    </TouchableOpacity>
                 </View>
                 <TouchableOpacity style={styles.buton} onPress={this.signOutUser}>
                     <Text>Salir</Text>
                 </TouchableOpacity>
 
+                    <TouchableOpacity style={styles.buton} onPress={ () => this.props.navigation.navigate("Form")} >
+                        <Text>Ver mis Streams</Text>
+                    </TouchableOpacity>
 
 				<TouchableOpacity
 					style={styles.adminBtnContainer}
