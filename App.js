@@ -5,11 +5,15 @@ import RegisterScreen from './components/RegisterScreen';
 import LoginScreen from './components/LoginScreen';
 import HomeScreen from './components/HomeScreen';
 import FormScreen from './components/FormScreen';
+import AddScreen from './components/AddScreen';
+import MessageScreen from './components/MessageScreen';
 
 const AppStack = createStackNavigator(
     {
         Home: HomeScreen,
-        Form: FormScreen
+        Form: FormScreen,
+        Add: AddScreen,
+        Mess: MessageScreen
     },
     {
         headerMode: 'none',
@@ -27,7 +31,6 @@ export default createAppContainer(
             Loading: LoadingScreen,
             App: AppStack,
             Auth: AuthStack,
-            Form: FormScreen
         },
         {
             initialRouteName: 'Loading',
