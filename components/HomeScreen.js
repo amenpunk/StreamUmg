@@ -49,7 +49,7 @@ export default class HomeScreen extends Component {
     renderPlayerView = () => {
 		const {paused} = this.state;
 		const source = {
-            uri: 'http://192.168.0.13:8000/live/STREAM_NAME/index.m3u8',
+            uri: 'http://40.122.152.174/live/STREAM_NAME?sign=1903744798-dedca6058f361ce27fad457f658365fd/index.m3u8',
 		};
 		return (
 			<Video
@@ -185,6 +185,10 @@ export default class HomeScreen extends Component {
                 </TouchableOpacity>
 
                     <TouchableOpacity style={styles.buton} onPress={ () => this.props.navigation.navigate("Form")} >
+                        <Text>Ver mis Streams</Text>
+                    </TouchableOpacity>
+                    
+                        <TouchableOpacity style={styles.buton} onPress={ () => this.props.navigation.navigate("Watch")} >
                         <Text>Ver mis Streams</Text>
                     </TouchableOpacity>
 

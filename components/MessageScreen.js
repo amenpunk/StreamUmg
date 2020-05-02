@@ -14,7 +14,7 @@ export default class MessageScreen extends Component {
         return (
             <View style={styles.container}>
                 <Text style={styles.exito}>
-                    Stream Eliminado
+                    Operacion compleatada exitosamente!!
                 </Text>
                 <Image style={styles.image} 
                     source={{uri:'https://icons-for-free.com/iconfiles/png/512/complete+done+green+success+valid+icon-1320183462969251652.png' }} />
@@ -34,6 +34,6 @@ const styles = StyleSheet.create({
         width: 230
     },
     exito : {
-        fontSize : 30
+        fontSize : 25
     }
 })

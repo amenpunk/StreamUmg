@@ -37,8 +37,9 @@ export default class FormScreen extends Component {
             .then(res => {
                 return res.json();
             })
-            .then(les => {
+            .then( async ( les ) => {
                 console.debug(les);
+                await fetch("http://40.122.152.174:3000/Restart")
                 this.props.navigation.navigate("Mess")
             });
     };

@@ -7,13 +7,15 @@ import HomeScreen from './components/HomeScreen';
 import FormScreen from './components/FormScreen';
 import AddScreen from './components/AddScreen';
 import MessageScreen from './components/MessageScreen';
+import WatchScreen from './components/WatchScreen';
 
 const AppStack = createStackNavigator(
     {
         Home: HomeScreen,
         Form: FormScreen,
         Add: AddScreen,
-        Mess: MessageScreen
+        Mess: MessageScreen,
+        Watch:WatchScreen
     },
     {
         headerMode: 'none',
