@@ -166,30 +166,21 @@ export default class HomeScreen extends Component {
 						</View>
 					</TouchableOpacity>
 				) : (
-					<TouchableOpacity
-						style={styles.playBtnContainer}
-						onPress={this.onPressPlayBtn}>
-						<View style={styles.playBtn}>
-							<Text style={styles.btnText}>
-								{paused ? 'PLAY' : 'PAUSE'}
-							</Text>
-						</View>
-					</TouchableOpacity>
+                <TouchableOpacity style={styles.playBtn} onPress={this.signOutUser}>
+                    <Text>Salir</Text>
+                </TouchableOpacity>
 				)}
 
                 <View>
                     <Text>Hola, {this.state.displayName || this.state.email}!</Text>
                 </View>
-                <TouchableOpacity style={styles.buton} onPress={this.signOutUser}>
-                    <Text>Salir</Text>
-                </TouchableOpacity>
 
-                    <TouchableOpacity style={styles.buton} onPress={ () => this.props.navigation.navigate("Form")} >
-                        <Text>Ver mis Streams</Text>
+                    <TouchableOpacity style={styles.playBtn} onPress={ () => this.props.navigation.navigate("Form")} >
+                        <Text>Ver lista de streams</Text>
                     </TouchableOpacity>
                     
-                        <TouchableOpacity style={styles.buton} onPress={ () => this.props.navigation.navigate("Watch")} >
-                        <Text>Ver mis Streams</Text>
+                        <TouchableOpacity style={styles.playBtn} onPress={ () => this.props.navigation.navigate("Watch")} >
+                        <Text>PLAY</Text>
                     </TouchableOpacity>
 
 				<TouchableOpacity
@@ -197,7 +188,7 @@ export default class HomeScreen extends Component {
 					onPress={this.onPressAdminBtn}>
 					<View style={styles.adminBtn}>
 						<Text style={styles.btnText}>
-							{admin ? 'USER' : 'ADMIN'}
+							{admin ? 'Usuario' : 'Administrador'}
 						</Text>
 					</View>
 				</TouchableOpacity>
@@ -238,11 +229,12 @@ const styles = StyleSheet.create({
 		right: 0,
 	},
 	playBtn: {
+        color : "#FFFFFF",
 		justifyContent: 'center',
 		alignItems: 'center',
 		alignSelf: 'center',
-		backgroundColor: '#ff1100',
-		borderColor: '#ff1100',
+		backgroundColor: '#4287f5',
+		borderColor: '#4287f5',
 		borderWidth: 3,
 		borderRadius: 2,
 		height: 50,
@@ -263,7 +255,7 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 		alignItems: 'center',
 		alignSelf: 'center',
-		backgroundColor: '#d1a667',
+		backgroundColor: '#cc0000',
 		borderColor: '#d1a667',
 		borderWidth: 3,
 		borderRadius: 2,
