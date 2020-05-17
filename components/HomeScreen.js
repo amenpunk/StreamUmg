@@ -6,7 +6,7 @@ import { NodeCameraView } from "react-native-nodemediaclient";
 
 const deviceWidth = Dimensions.get("window").width;
 const settings = {
-	camera: {cameraId: 1, cameraFrontMirror: true},
+	camera: {cameraId: 2, cameraFrontMirror: true},
 	audio: {bitrate: 32000, profile: 1, samplerate: 44100},
 	video: {
 		preset: 24,
