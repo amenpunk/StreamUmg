@@ -6,7 +6,7 @@ export default class MessageScreen extends Component {
 
     componentDidMount(){
         firebase.auth().onAuthStateChanged( user => {
-            this.props.navigation.navigate(user ? "App" : "Auth")
+            this.id = setTimeout(() =>  this.props.navigation.navigate("Home"), 2000)
         })
     }
 
@@ -34,6 +34,10 @@ const styles = StyleSheet.create({
         width: 230
     },
     exito : {
-        fontSize : 25
+        textAlign: 'center', 
+        fontWeight: 'bold',
+        fontSize: 20,
+        marginTop: 0,
+        width: 200,
     }
 })

@@ -1,10 +1,10 @@
-import React, {Component} from 'react';
-import {
-    StyleSheet,
-    Text,
-    View,
-    TextInput,
-    TouchableOpacity,
+    import React, {Component} from 'react';
+    import {
+        StyleSheet,
+        Text,
+        View,
+        TextInput,
+        TouchableOpacity,
 } from 'react-native';
 import * as firebase from 'firebase';
 
@@ -18,13 +18,11 @@ export default class RegisterScreen extends Component {
     };
 
     handleSigUp = () => {
-        const pass = "12345678"
         const {email, password} = this.state;
         firebase
             .auth()
             .createUserWithEmailAndPassword(
-                this.state.email,
-                pass
+                email,password
             )
             .then(async nuevo => {
                 let id = nuevo.user.uid;
