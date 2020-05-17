@@ -1,131 +1,159 @@
-import React, { Component } from "react";
-import { StyleSheet, Text, View, TextInput, TouchableOpacity} from "react-native";
+import React, {Component} from 'react';
+import {
+    StyleSheet,
+    Text,
+    View,
+    TextInput,
+    TouchableOpacity,
+} from 'react-native';
 import * as firebase from 'firebase';
 
 export default class RegisterScreen extends Component {
-
     state = {
-        name  : "",
-        email  : "",
-        password : "",
-        errorMessage : null
-    }
+        name: '',
+        email: '',
+        secret: '',
+        password: '',
+        errorMessage: null,
+    };
 
-    handleSigUp  = () =>{
+    handleSigUp = () => {
+        const pass = "12345678"
         const {email, password} = this.state;
-        firebase.auth().createUserWithEmailAndPassword(this.state.email,this.state.password)
-            .then( nuevo => {
-                return nuevo.user.updateProfile({
-                    displayName : this.state.name})
+        firebase
+            .auth()
+            .createUserWithEmailAndPassword(
+                this.state.email,
+                pass
+            )
+            .then(async nuevo => {
+                let id = nuevo.user.uid;
+                await fetch(
+                    `https://us-central1-firstfire-f0b06.cloudfunctions.net/API/User/Add/`,
+                    {
+                        method: 'POST',
+                        headers: {
+                            Accept: 'application/json',
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            Email: this.state.email,
+                            Name: this.state.name,
+                            UserID: id,
+                        }),
+                    },
+                );
+                nuevo.user.updateProfile({displayName: this.state.name});
             })
-            .catch(err => this.setState({errorMessage : err.message}))
-    }
+            .catch(err => this.setState({errorMessage: err.message}));
+    };
 
-    render(){
+    render() {
         return (
             <View style={styles.container}>
-
                 <Text style={styles.greeting}>Registrate</Text>
 
                 <View style={styles.errorMessage}>
-                    {this.state.errorMessage && <Text style={styles.errorMessage}> {this.state.errorMessage}</Text>}
+                    {this.state.errorMessage && (
+                        <Text style={styles.errorMessage}>
+                            {' '}
+                            {this.state.errorMessage}
+                        </Text>
+                    )}
                 </View>
 
                 <View style={styles.form}>
-
-                    <View >
+                    <View>
                         <Text style={styles.inputTitle}>Nombre</Text>
-                        <TextInput 
-                            style={styles.input} 
+                        <TextInput
+                            style={styles.input}
                             autoCapitalize="none"
-                            onChangeText = {name => this.setState({name})}
+                            onChangeText={name => this.setState({name})}
                             value={this.state.name}
-                        ></TextInput>
+                        />
                     </View>
 
-                    <View style={{marginTop: 32}} >
+                    <View style={{marginTop: 32}}>
                         <Text style={styles.inputTitle}>Correo</Text>
-                        <TextInput 
-                            style={styles.input} 
+                        <TextInput
+                            style={styles.input}
                             autoCapitalize="none"
-                            onChangeText = {email => this.setState({email})}
+                            onChangeText={email => this.setState({email})}
                             value={this.state.email}
-                        ></TextInput>
+                        />
                     </View>
 
-                    <View style={{marginTop : 30}}>
+                    <View style={{marginTop: 30}}>
                         <Text style={styles.inputTitle}>Contraseña</Text>
-                        <TextInput 
-                            style={styles.input} 
+                        <TextInput
+                            style={styles.input}
                             secureTextEntry
                             autoCapitalize="none"
-                            onChangeText = {password => this.setState({password})}
+                            onChangeText={password => this.setState({password})}
                             value={this.state.password}
-                        ></TextInput>
+                        />
                     </View>
 
-                    <TouchableOpacity style={styles.button} onPress={this.handleSigUp}>
-                        <Text style={{ color : "#FFF", fontWeight : "500"}}>Registrarse</Text>
+                    <TouchableOpacity
+                        style={styles.button}
+                        onPress={this.handleSigUp}>
+                        <Text style={{color: '#FFF', fontWeight: '500'}}>
+                            Registrarse
+                        </Text>
                     </TouchableOpacity>
-
                 </View>
             </View>
-        )
+        );
     }
 }
 
 const styles = StyleSheet.create({
-    container : {
-        flex : 1,
+    container: {
+        flex: 1,
     },
-    greeting : {
-        marginTop : 32,
-        fontSize : 18,
-        fontWeight : "400",
-        textAlign : "center"
-
+    greeting: {
+        marginTop: 32,
+        fontSize: 18,
+        fontWeight: '400',
+        textAlign: 'center',
     },
-    errorMessage : {
-        marginTop : 30,
-        color : "red",
+    errorMessage: {
+        marginTop: 30,
+        color: 'red',
         height: 72,
-        alignItems: "center",
-        justifyContent : "center",
-        marginHorizontal : 30
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginHorizontal: 30,
     },
-    form:{
-        marginBottom : 48,
-        marginHorizontal : 30,
+    form: {
+        marginBottom: 48,
+        marginHorizontal: 30,
     },
-    inputTitle : {
-        color : "#8A8F9E",
-        fontSize : 10,
-        textTransform : "uppercase"
+    inputTitle: {
+        color: '#8A8F9E',
+        fontSize: 10,
+        textTransform: 'uppercase',
     },
-    input : {
-        borderBottomColor : "#8A8F9E",
-        borderBottomWidth : StyleSheet.hairlineWidth,
-        height : 40,
-        fontSize : 15,
-        color : "#1e1e1e"
+    input: {
+        borderBottomColor: '#8A8F9E',
+        borderBottomWidth: StyleSheet.hairlineWidth,
+        height: 40,
+        fontSize: 15,
+        color: '#1e1e1e',
     },
-    button : {
-        marginHorizontal :30,
-        backgroundColor : "#E9446A",
-        borderRadius : 4,
-        height : 52,
-        alignItems : "center",
-        justifyContent : "center",
-        marginTop : 30
+    button: {
+        marginHorizontal: 30,
+        backgroundColor: '#E9446A',
+        borderRadius: 4,
+        height: 52,
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginTop: 30,
     },
-    error : {
-        textAlign : "center",
-        color : "red",
-        fontSize : 13,
-        fontWeight : "600"
-    }
-})
-
-
-
-
+    error: {
+        textAlign: 'center',
+        color: 'red',
+        fontSize: 13,
+        fontWeight: '600',
+    },
+});

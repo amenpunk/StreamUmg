@@ -21,48 +21,50 @@ export default class FormScreen extends Component {
         streams: null,
     };
 
-    deleteStream = URL => {
-        fetch(`${this.state.url}/DeleteStream/`, {
-            method: 'POST',
+    deleteStream = async URL => {
+        const token = await firebase.auth().currentUser.getIdToken();
+        const Bearer = `Bearer ${token}`;
+        fetch(`${this.state.url}/Stream/Delete`, {
+            method: 'DELETE',
             headers: {
                 Accept: 'application/json',
                 'Content-Type': 'application/json',
+                Authorization: Bearer,
             },
             body: JSON.stringify({
                 Mail: this.state.email,
-                apikey: this.state.email,
                 URL: URL,
             }),
         })
             .then(res => {
                 return res.json();
             })
-            .then( async ( les ) => {
-                console.debug(les);
-                await fetch("http://40.122.152.174:3000/Restart")
-                this.props.navigation.navigate("Mess")
+            .then(async les => {
+                console.debug(les)
+            // await fetch('http://40.122.152.174:3000/Restart');
+                this.props.navigation.navigate('Mess');
             });
     };
 
-    getStream = () => {
+    getStream = async () => {
+        const token = await firebase.auth().currentUser.getIdToken();
+        const Bearer = `Bearer ${token}`;
         this.setState({loading: true});
-        fetch(`${this.state.url}/GetStream`, {
+        fetch(`${this.state.url}/Stream/Get`, {
             method: 'POST',
             headers: {
                 Accept: 'application/json',
                 'Content-Type': 'application/json',
+                Authorization: Bearer,
             },
             body: JSON.stringify({
                 Mail: this.state.email,
-                apikey: this.state.email,
             }),
         })
             .then(res => {
-                console.debug(this.state.email);
                 return res.json();
             })
             .then(les => {
-                console.debug(les);
                 this.setState({
                     streams: les,
                     loading: false,
