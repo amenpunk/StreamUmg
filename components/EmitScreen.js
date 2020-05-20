@@ -3,7 +3,6 @@ import {Image ,StyleSheet, Text, View, Dimensions, TouchableOpacity, Permissions
 import * as firebase from 'firebase';
 import Video from "react-native-video";
 import { NodeCameraView } from "react-native-nodemediaclient";
-
 const deviceWidth = Dimensions.get("window").width;
 const settings = {
 	camera: {cameraId: 2, cameraFrontMirror: true},
@@ -17,9 +16,10 @@ const settings = {
 	},
 };
 
-export default class HomeScreen extends Component {
-    state = {
-        name : "",
+
+
+export default class EmitScreen extends Component {
+    state = { name : "",
         email : "",
         displayName : "",
 		admin: false,
@@ -28,7 +28,7 @@ export default class HomeScreen extends Component {
 		hasPermission: false,
 		paused: true,
     }
-	
+   
     onPressAdminBtn = async () => {
 		const {admin: adminState, hasPermission} = this.state;
 		this.setState({admin: !adminState});
@@ -41,12 +41,29 @@ export default class HomeScreen extends Component {
 		}
 	};
 	
-    onPressPlayBtn = () => {
-		const {paused: pausedState} = this.state;
-		this.setState({paused: !pausedState});
+    renderCameraView = () => {
+		const {hasPermission} = this.state;
+		if (Platform.OS === 'android' && !hasPermission) {
+			return <View />;
+		}
+
+		return (
+			<NodeCameraView
+				style={styles.nodeCameraView}
+				/* eslint-disable */
+				ref={vb => {
+					this.vb = vb;
+				}}
+                outputUrl="rtmp://40.122.152.174/live/STREAM_NAME?sign=1903744798-dedca6058f361ce27fad457f658365fd"
+				camera={settings.camera}
+				audio={settings.audio}
+				video={settings.video}
+				autopreview
+			/>
+		);
 	};
-	
-    renderPlayerView = () => {
+    
+    renderPlayerViej = () => {
 		const {paused} = this.state;
 		const source = {
             uri: 'http://40.122.152.174/live/STREAM_NAME?sign=1903744798-dedca6058f361ce27fad457f658365fd/index.m3u8',
@@ -68,37 +85,19 @@ export default class HomeScreen extends Component {
 			/>
 		);
 	};
-
-	onBuffer = buffer => {
+    onPressPlayBtn = () => {
+		const {paused: pausedState} = this.state;
+		this.setState({paused: !pausedState});
+	};
+	
+    onBuffer = buffer => {
 		console.log('onBuffer: ', buffer);
 	};
 
 	onError = error => {
 		console.log('onError: ', error);
 	};
-
-	renderCameraView = () => {
-		const {hasPermission} = this.state;
-		if (Platform.OS === 'android' && !hasPermission) {
-			return <View />;
-		}
-
-		return (
-			<NodeCameraView
-				style={styles.nodeCameraView}
-				/* eslint-disable */
-				ref={vb => {
-					this.vb = vb;
-				}}
-                outputUrl="rtmp://40.122.152.174/live/STREAM_NAME?sign=1903744798-dedca6058f361ce27fad457f658365fd"
-				camera={settings.camera}
-				audio={settings.audio}
-				video={settings.video}
-				autopreview
-			/>
-		);
-	};
-	
+    
     checkPermissions = async () => {
 		console.log('Checking Permissions Android');
 		try {
@@ -140,56 +139,41 @@ export default class HomeScreen extends Component {
 
 		this.setState({isPublishing: !publishingState});
 	};
-
-
+    
     componentDidMount() {
         const { email,displayName, name} = firebase.auth().currentUser;
         this.setState({email,displayName,name});
     }
-
+    
     signOutUser = () =>{
         firebase.auth().signOut();
     }
 
     render(){
-        const {admin, paused, isPublishing} = this.state;
-        return (
-            <View style={styles.container}>
-                <Image source={{uri: 'https://cdn.pixabay.com/photo/2016/03/31/19/58/avatar-1295431_960_720.png'}}
-                    style={{width: 50, height: 50}} />
+		const {admin, paused, isPublishing} = this.state;
+		return (
+			<View style={styles.container}>
+				{this.renderCameraView()  }
+					<TouchableOpacity onPress={this.onPressAdminBtn,this.onPressPublishBtn}>
+						<View style={styles.goLive}>
+							<Text style={styles.btnText}>
+								{isPublishing ? 'END LIVE' : 'GO LIVE'}
+							</Text>
+						</View>
+					</TouchableOpacity>
 
-                <View>
-                    <Text>Hola, {this.state.displayName || this.state.email}!</Text>
-                </View>
-
-
-                <TouchableOpacity style={styles.playBtn} onPress={ () => this.props.navigation.navigate("Watch")} >
-                    <Text>PLAY</Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity
-                    style={styles.adminBtnContainer}
-                    onPress={ () => this.props.navigation.navigate("Emit")} >
-                    <View style={styles.adminBtn}>
-                        <Text style={styles.btnText}>
-                            Admnistrador
-                        </Text>
-                    </View>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.playBtn} onPress={this.signOutUser}>
-                    <Text>Salir</Text>
-                </TouchableOpacity>
-            </View>
-        );
+                    <TouchableOpacity style={styles.playBtn} onPress={ () => this.props.navigation.navigate("Form")} >
+                        <Text>Ver lista de streams</Text>
+                    </TouchableOpacity>
+			</View>
+		);
     }
 }
 
-
 const styles = StyleSheet.create({
-   
     container : {
         flex : 1,
-// backgroundColor: '#FFFFFF',
+        backgroundColor: '#FFFFFF',
 		justifyContent: 'center',
         alignItems: "center"
     },buton : { 

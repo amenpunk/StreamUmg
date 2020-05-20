@@ -8,6 +8,7 @@ import FormScreen from './components/FormScreen';
 import AddScreen from './components/AddScreen';
 import MessageScreen from './components/MessageScreen';
 import WatchScreen from './components/WatchScreen';
+import EmitScreen from './components/EmitScreen';
 
 const AppStack = createStackNavigator(
     {
@@ -15,7 +16,8 @@ const AppStack = createStackNavigator(
         Form: FormScreen,
         Add: AddScreen,
         Mess: MessageScreen,
-        Watch:WatchScreen
+        Watch:WatchScreen,
+        Emit:EmitScreen
     },
     {
         headerMode: 'none',
