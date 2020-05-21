@@ -31,15 +31,35 @@ export default class HomeScreen extends Component {
         photoURL : ''
 	}
 
+    componentWillUnmount() {
+		const { photoURL } = firebase.auth().currentUser;
+		this.setState({ photoURL });
+        this.forceUpdate()
+    }
 
 	componentDidMount() {
 		const { email, displayName, name, photoURL } = firebase.auth().currentUser;
 		this.setState({ email, displayName, name, photoURL });
 	}
+    componentWillMount() {
+        firebase.auth().onAuthStateChanged(user => {
+            this.props.navigation.navigate(user ? 'App' : 'Auth');
+        });
+		const { email, displayName, name, photoURL } = firebase.auth().currentUser;
+		this.setState({ email, displayName, name, photoURL });
+    }
 
 	signOutUser = () => {
 		firebase.auth().signOut();
 	}
+
+    handleOnNavigateBack = (photoURL) => {
+        const { photoURL : img } = firebase.auth().currentUser;
+        this.setState({
+            photoURL : img
+        })
+    }
+
 
 	render() {
 		const { admin, paused, isPublishing } = this.state;
@@ -51,7 +71,11 @@ export default class HomeScreen extends Component {
 				</View>
                 <Image source={{ uri: this.state.photoURL ? this.state.photoURL :'https://cdn.pixabay.com/photo/2016/03/31/19/58/avatar-1295431_960_720.png' }}
                     style={{ width: 175, height: 210 }} />
-                <TouchableOpacity onPress={() => this.props.navigation.navigate("Image")} style={styles.playBtn}>
+                <TouchableOpacity onPress={() =>
+                        this.props.navigation.navigate('Image', {
+                            onNavigateBack: this.handleOnNavigateBack
+                        })
+                    } style={styles.playBtn}>
                     <Text >Actualizar Avatar</Text>
                 </TouchableOpacity>
 

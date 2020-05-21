@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import {TouchableOpacity, StyleSheet, Text, View, ActivityIndicator} from "react-native";
+import {Alert,TouchableOpacity, StyleSheet, Text, View, ActivityIndicator} from "react-native";
 import * as firebase from 'firebase';
 import ImagePicker from 'react-native-image-picker';
 
@@ -16,7 +16,8 @@ export default class ImageScreen extends Component {
         fileData: '',
         fileUri: '',
         filePath : '',
-        Mime : ''
+        Mime : '',
+        photoURL : ''
 	}
     componentDidMount(){
         firebase.auth().onAuthStateChanged( user => {
@@ -75,6 +76,7 @@ export default class ImageScreen extends Component {
     }
 
     upload = async () => {
+        Alert.alert("Tu archivo se esta subiendo  :)")
         const uri = this.state.fileUri;
         const image = this.state.fileData;
         const path = this.state.filePath;
@@ -84,15 +86,22 @@ export default class ImageScreen extends Component {
         const blob = await this.uriToBlob(uri)
         console.log(blob)
         Ref.put(blob, {contentType : mime}).then(function(snapshot) {
-            console.debug('Uploaded a blob or file!');
             console.log(snapshot)
         }).then(() => {
             return Ref.getDownloadURL()
         }).then( url => {
             console.log(url)
-            firebase.auth().currentUser.updateProfile({
+            return firebase.auth().currentUser.updateProfile({
                 photoURL : url
             })
+            this.setState({
+                photoURL : url
+            })
+        }).then( () => {
+            Alert.alert("Tu archivo se ha subido éxitosamente")
+            this.props.navigation.state.params.onNavigateBack(this.state.photoURL)
+            this.props.navigation.goBack()
+
         } )
 
     }

@@ -9,10 +9,27 @@ var box_count = 3;
 var box_height = height / box_count;
 
 export default class WatchScreen extends Component {
+    
     state = {
         messages: [],
+        name: "",
+        email: "",
+        displayName: "",
+        admin: false,
+        userComment: '',
+        hasPermission: false,
+        paused: true,
+        fileData: '',
+        fileUri: '',
+        filePath : '',
+        Mime : '',
+        photoURL : '',
+        uid : ''
     };
+   
     componentDidMount() {
+		const { email, displayName, name, photoURL = 'https://cdn.pixabay.com/photo/2016/03/31/19/58/avatar-1295431_960_720.png',uid } = firebase.auth().currentUser;
+		this.setState({ email, displayName, name, photoURL, uid });
         this.socket = io('http://40.69.159.146:3000');
         this.socket.on('put', obj => {
             this.setState(previousState => ({
@@ -56,9 +73,9 @@ export default class WatchScreen extends Component {
                         messages={this.state.messages}
                         onSend={messages => this.addMessage(messages)}
                         user={{
-                            _id: 2,
-                            name: 'React Native',
-                            avatar: 'https://placeimg.com/140/140/any',
+                            _id: this.state.uid,
+                            name: this.state.displayName,
+                            avatar:this.state.photoURL 
                         }}
                     />
                 </View>
