@@ -1,8 +1,6 @@
 import React, { Component } from "react";
-import { Image, StyleSheet, Text, View, Dimensions, TouchableOpacity, PermissionsAndroid, Platform } from "react-native";
+import { Alert,Image, StyleSheet, Text, View, Dimensions, TouchableOpacity, PermissionsAndroid, Platform } from "react-native";
 import * as firebase from 'firebase';
-import Video from "react-native-video";
-import { NodeCameraView } from "react-native-nodemediaclient";
 
 const deviceWidth = Dimensions.get("window").width;
 const settings = {
@@ -23,123 +21,14 @@ export default class HomeScreen extends Component {
 		email: "",
 		displayName: "",
 		admin: false,
-		isPublishing: false,
 		userComment: '',
 		hasPermission: false,
-		paused: true,
+        paused: true,
+        fileData: '',
+        fileUri: '',
+        filePath : '',
+        Mime : ''
 	}
-
-	onPressAdminBtn = async () => {
-		const { admin: adminState, hasPermission } = this.state;
-		this.setState({ admin: !adminState });
-		if (!adminState) {
-			if (Platform.OS === 'android') {
-				if (!hasPermission) {
-					await this.checkPermissions();
-				}
-			}
-		}
-	};
-
-	onPressPlayBtn = () => {
-		const { paused: pausedState } = this.state;
-		this.setState({ paused: !pausedState });
-	};
-
-	renderPlayerView = () => {
-		const { paused } = this.state;
-		const source = {
-			uri: 'http://40.122.152.174/live/STREAM_NAME?sign=1903744798-dedca6058f361ce27fad457f658365fd/index.m3u8',
-		};
-		return (
-			<Video
-				source={source} // Can be a URL or a local file.
-				/* eslint-disable */
-				ref={ref => {
-					this.player = ref;
-				}} // Store reference
-				/* eslint-enable */
-				onBuffer={this.onBuffer} // Callback when remote video is buffering
-				onError={this.onError} // Callback when video cannot be loaded
-				style={styles.nodePlayerView}
-				fullscreen={false}
-				resizeMode="cover"
-				paused={paused}
-			/>
-		);
-	};
-
-	onBuffer = buffer => {
-		console.log('onBuffer: ', buffer);
-	};
-
-	onError = error => {
-		console.log('onError: ', error);
-	};
-
-	renderCameraView = () => {
-		const { hasPermission } = this.state;
-		if (Platform.OS === 'android' && !hasPermission) {
-			return <View />;
-		}
-
-		return (
-			<NodeCameraView
-				style={styles.nodeCameraView}
-				/* eslint-disable */
-				ref={vb => {
-					this.vb = vb;
-				}}
-				outputUrl="rtmp://40.122.152.174/live/STREAM_NAME?sign=1903744798-dedca6058f361ce27fad457f658365fd"
-				camera={settings.camera}
-				audio={settings.audio}
-				video={settings.video}
-				autopreview
-			/>
-		);
-	};
-
-	checkPermissions = async () => {
-		console.log('Checking Permissions Android');
-		try {
-			const granted = await PermissionsAndroid.requestMultiple([
-				PermissionsAndroid.PERMISSIONS.CAMERA,
-				PermissionsAndroid.PERMISSIONS.RECORD_AUDIO,
-				PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
-			]);
-			let hasAllPermissions = true;
-			Object.keys(granted).forEach(key => {
-				// key: the name of the object key
-				// index: the ordinal position of the key within the object
-				if (granted[key] !== 'granted') {
-					console.log('Does not have permission for: ', granted[key]);
-					hasAllPermissions = false;
-				}
-			});
-			console.log('hasAllPermissions: ', hasAllPermissions);
-			this.setState({ hasPermission: hasAllPermissions });
-		} catch (err) {
-			console.warn(err);
-		}
-	};
-
-	onPressPublishBtn = async () => {
-		const { isPublishing: publishingState, hasPermission } = this.state;
-		if (Platform.OS === 'android') {
-			if (!hasPermission) {
-				this.checkPermissions();
-				return;
-			}
-		}
-
-		if (publishingState) {
-			this.vb.stop();
-		} else {
-			this.vb.start();
-		}
-
-		this.setState({ isPublishing: !publishingState });
-	};
 
 
 	componentDidMount() {
@@ -155,13 +44,15 @@ export default class HomeScreen extends Component {
 		const { admin, paused, isPublishing } = this.state;
 		return (
 			<View style={styles.container}>
-				<Image source={{ uri: 'https://cdn.pixabay.com/photo/2016/03/31/19/58/avatar-1295431_960_720.png' }}
-					style={{ width: 50, height: 50 }} />
+                <Image source={{ uri: firebase.auth().currentUser.photoURL.length ? firebase.auth().currentUser.photoURL :'https://cdn.pixabay.com/photo/2016/03/31/19/58/avatar-1295431_960_720.png' }}
+                    style={{ width: 50, height: 50 }} />
 
 				<View>
 					<Text>Hola, {this.state.displayName || this.state.email}!</Text>
 				</View>
-
+                <TouchableOpacity onPress={() => this.props.navigation.navigate("Image")} style={styles.playBtn}>
+                    <Text >Actualizar Avatar</Text>
+                </TouchableOpacity>
 
 				<TouchableOpacity style={styles.playBtn} onPress={() => this.props.navigation.navigate("Watch")} >
 					<Text>PLAY</Text>
@@ -201,20 +92,6 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 		justifyContent: "center",
 		marginTop: 30
-	},
-	nodePlayerView: {
-		position: 'absolute',
-		top: 0,
-		bottom: 0,
-		left: 0,
-		right: 0,
-	},
-	nodeCameraView: {
-		position: 'absolute',
-		top: 0,
-		bottom: 0,
-		left: 0,
-		right: 0,
 	},
 	playBtn: {
 		color: "#FFFFFF",
@@ -270,4 +147,14 @@ const styles = StyleSheet.create({
 		elevation: 4,
 	},
 	btnText: { color: '#FFF', fontSize: 18 },
+    btnSection: {
+            width: 225,
+            height: 50,
+            backgroundColor: '#DCDCDC',
+            alignItems: 'center',
+            justifyContent: 'center',
+            borderRadius: 3,
+            marginBottom:10
+          
+    }
 })
