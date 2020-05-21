@@ -43,7 +43,7 @@ export default class WatchScreen extends Component {
                                 this.vp = vp;
                             }}
                             inputUrl={
-                                'rtmp://40.122.152.174/live/STREAM_NAME?sign=1903744798-dedca6058f361ce27fad457f658365fd'
+                                'rtmp://40.69.159.146/live/STREAM_NAME?sign=1903744798-dedca6058f361ce27fad457f658365fd'
                             }
                             bufferTime={300}
                             maxBufferTime={1000}

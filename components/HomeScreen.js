@@ -1,13 +1,13 @@
 import React, { Component } from "react";
-import {Image ,StyleSheet, Text, View, Dimensions, TouchableOpacity, PermissionsAndroid, Platform} from "react-native";
+import { Image, StyleSheet, Text, View, Dimensions, TouchableOpacity, PermissionsAndroid, Platform } from "react-native";
 import * as firebase from 'firebase';
 import Video from "react-native-video";
 import { NodeCameraView } from "react-native-nodemediaclient";
 
 const deviceWidth = Dimensions.get("window").width;
 const settings = {
-	camera: {cameraId: 2, cameraFrontMirror: true},
-	audio: {bitrate: 32000, profile: 1, samplerate: 44100},
+	camera: { cameraId: 2, cameraFrontMirror: true },
+	audio: { bitrate: 32000, profile: 1, samplerate: 44100 },
 	video: {
 		preset: 24,
 		bitrate: 400000,
@@ -18,20 +18,20 @@ const settings = {
 };
 
 export default class HomeScreen extends Component {
-    state = {
-        name : "",
-        email : "",
-        displayName : "",
+	state = {
+		name: "",
+		email: "",
+		displayName: "",
 		admin: false,
 		isPublishing: false,
 		userComment: '',
 		hasPermission: false,
 		paused: true,
-    }
-	
-    onPressAdminBtn = async () => {
-		const {admin: adminState, hasPermission} = this.state;
-		this.setState({admin: !adminState});
+	}
+
+	onPressAdminBtn = async () => {
+		const { admin: adminState, hasPermission } = this.state;
+		this.setState({ admin: !adminState });
 		if (!adminState) {
 			if (Platform.OS === 'android') {
 				if (!hasPermission) {
@@ -40,16 +40,16 @@ export default class HomeScreen extends Component {
 			}
 		}
 	};
-	
-    onPressPlayBtn = () => {
-		const {paused: pausedState} = this.state;
-		this.setState({paused: !pausedState});
+
+	onPressPlayBtn = () => {
+		const { paused: pausedState } = this.state;
+		this.setState({ paused: !pausedState });
 	};
-	
-    renderPlayerView = () => {
-		const {paused} = this.state;
+
+	renderPlayerView = () => {
+		const { paused } = this.state;
 		const source = {
-            uri: 'http://40.122.152.174/live/STREAM_NAME?sign=1903744798-dedca6058f361ce27fad457f658365fd/index.m3u8',
+			uri: 'http://40.122.152.174/live/STREAM_NAME?sign=1903744798-dedca6058f361ce27fad457f658365fd/index.m3u8',
 		};
 		return (
 			<Video
@@ -78,7 +78,7 @@ export default class HomeScreen extends Component {
 	};
 
 	renderCameraView = () => {
-		const {hasPermission} = this.state;
+		const { hasPermission } = this.state;
 		if (Platform.OS === 'android' && !hasPermission) {
 			return <View />;
 		}
@@ -90,7 +90,7 @@ export default class HomeScreen extends Component {
 				ref={vb => {
 					this.vb = vb;
 				}}
-                outputUrl="rtmp://40.122.152.174/live/STREAM_NAME?sign=1903744798-dedca6058f361ce27fad457f658365fd"
+				outputUrl="rtmp://40.122.152.174/live/STREAM_NAME?sign=1903744798-dedca6058f361ce27fad457f658365fd"
 				camera={settings.camera}
 				audio={settings.audio}
 				video={settings.video}
@@ -98,8 +98,8 @@ export default class HomeScreen extends Component {
 			/>
 		);
 	};
-	
-    checkPermissions = async () => {
+
+	checkPermissions = async () => {
 		console.log('Checking Permissions Android');
 		try {
 			const granted = await PermissionsAndroid.requestMultiple([
@@ -117,14 +117,14 @@ export default class HomeScreen extends Component {
 				}
 			});
 			console.log('hasAllPermissions: ', hasAllPermissions);
-			this.setState({hasPermission: hasAllPermissions});
+			this.setState({ hasPermission: hasAllPermissions });
 		} catch (err) {
 			console.warn(err);
 		}
 	};
-	
-    onPressPublishBtn = async () => {
-		const {isPublishing: publishingState, hasPermission} = this.state;
+
+	onPressPublishBtn = async () => {
+		const { isPublishing: publishingState, hasPermission } = this.state;
 		if (Platform.OS === 'android') {
 			if (!hasPermission) {
 				this.checkPermissions();
@@ -138,70 +138,70 @@ export default class HomeScreen extends Component {
 			this.vb.start();
 		}
 
-		this.setState({isPublishing: !publishingState});
+		this.setState({ isPublishing: !publishingState });
 	};
 
 
-    componentDidMount() {
-        const { email,displayName, name} = firebase.auth().currentUser;
-        this.setState({email,displayName,name});
-    }
+	componentDidMount() {
+		const { email, displayName, name } = firebase.auth().currentUser;
+		this.setState({ email, displayName, name });
+	}
 
-    signOutUser = () =>{
-        firebase.auth().signOut();
-    }
+	signOutUser = () => {
+		firebase.auth().signOut();
+	}
 
-    render(){
-        const {admin, paused, isPublishing} = this.state;
-        return (
-            <View style={styles.container}>
-                <Image source={{uri: 'https://cdn.pixabay.com/photo/2016/03/31/19/58/avatar-1295431_960_720.png'}}
-                    style={{width: 50, height: 50}} />
+	render() {
+		const { admin, paused, isPublishing } = this.state;
+		return (
+			<View style={styles.container}>
+				<Image source={{ uri: 'https://cdn.pixabay.com/photo/2016/03/31/19/58/avatar-1295431_960_720.png' }}
+					style={{ width: 50, height: 50 }} />
 
-                <View>
-                    <Text>Hola, {this.state.displayName || this.state.email}!</Text>
-                </View>
+				<View>
+					<Text>Hola, {this.state.displayName || this.state.email}!</Text>
+				</View>
 
 
-                <TouchableOpacity style={styles.playBtn} onPress={ () => this.props.navigation.navigate("Watch")} >
-                    <Text>PLAY</Text>
-                </TouchableOpacity>
+				<TouchableOpacity style={styles.playBtn} onPress={() => this.props.navigation.navigate("Watch")} >
+					<Text>PLAY</Text>
+				</TouchableOpacity>
 
-                <TouchableOpacity
-                    style={styles.adminBtnContainer}
-                    onPress={ () => this.props.navigation.navigate("Emit")} >
-                    <View style={styles.adminBtn}>
-                        <Text style={styles.btnText}>
-                            Admnistrador
+				<TouchableOpacity
+					style={styles.adminBtnContainer}
+					onPress={() => this.props.navigation.navigate("Emit")} >
+					<View style={styles.adminBtn}>
+						<Text style={styles.btnText}>
+							Admnistrador
                         </Text>
-                    </View>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.playBtn} onPress={this.signOutUser}>
-                    <Text>Salir</Text>
-                </TouchableOpacity>
-            </View>
-        );
-    }
+					</View>
+				</TouchableOpacity>
+				<TouchableOpacity style={styles.playBtn} onPress={this.signOutUser}>
+					<Text>Salir</Text>
+				</TouchableOpacity>
+			</View>
+		);
+	}
 }
 
 
 const styles = StyleSheet.create({
-   
-    container : {
-        flex : 1,
-// backgroundColor: '#FFFFFF',
+
+	container: {
+		flex: 1,
+		// backgroundColor: '#FFFFFF',
 		justifyContent: 'center',
-        alignItems: "center"
-    },buton : { 
-        marginTop : 32,
-        marginHorizontal :30,
-        backgroundColor : "#0d8d9e",
-        borderRadius : 4,
-        height : 30,
-        alignItems : "center",
-        justifyContent : "center",
-        marginTop : 30
-    },
+		alignItems: "center"
+	}, buton: {
+		marginTop: 32,
+		marginHorizontal: 30,
+		backgroundColor: "#0d8d9e",
+		borderRadius: 4,
+		height: 30,
+		alignItems: "center",
+		justifyContent: "center",
+		marginTop: 30
+	},
 	nodePlayerView: {
 		position: 'absolute',
 		top: 0,
@@ -217,7 +217,7 @@ const styles = StyleSheet.create({
 		right: 0,
 	},
 	playBtn: {
-        color : "#FFFFFF",
+		color: "#FFFFFF",
 		justifyContent: 'center',
 		alignItems: 'center',
 		alignSelf: 'center',
@@ -269,5 +269,5 @@ const styles = StyleSheet.create({
 		borderRadius: 5,
 		elevation: 4,
 	},
-	btnText: {color: '#FFF', fontSize: 18},
+	btnText: { color: '#FFF', fontSize: 18 },
 })
