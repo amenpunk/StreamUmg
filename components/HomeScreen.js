@@ -27,13 +27,14 @@ export default class HomeScreen extends Component {
         fileData: '',
         fileUri: '',
         filePath : '',
-        Mime : ''
+        Mime : '',
+        photoURL : ''
 	}
 
 
 	componentDidMount() {
-		const { email, displayName, name } = firebase.auth().currentUser;
-		this.setState({ email, displayName, name });
+		const { email, displayName, name, photoURL } = firebase.auth().currentUser;
+		this.setState({ email, displayName, name, photoURL });
 	}
 
 	signOutUser = () => {
@@ -44,35 +45,38 @@ export default class HomeScreen extends Component {
 		const { admin, paused, isPublishing } = this.state;
 		return (
 			<View style={styles.container}>
-                <Image source={{ uri: firebase.auth().currentUser.photoURL.length ? firebase.auth().currentUser.photoURL :'https://cdn.pixabay.com/photo/2016/03/31/19/58/avatar-1295431_960_720.png' }}
-                    style={{ width: 50, height: 50 }} />
 
 				<View>
-					<Text>Hola, {this.state.displayName || this.state.email}!</Text>
+                    <Text style={styles.name}>Hola, {this.state.displayName || this.state.email}!</Text>
 				</View>
+                <Image source={{ uri: this.state.photoURL ? this.state.photoURL :'https://cdn.pixabay.com/photo/2016/03/31/19/58/avatar-1295431_960_720.png' }}
+                    style={{ width: 175, height: 210 }} />
                 <TouchableOpacity onPress={() => this.props.navigation.navigate("Image")} style={styles.playBtn}>
                     <Text >Actualizar Avatar</Text>
                 </TouchableOpacity>
 
 				<TouchableOpacity style={styles.playBtn} onPress={() => this.props.navigation.navigate("Watch")} >
-					<Text>PLAY</Text>
+					<Text>Entrar a Stream</Text>
 				</TouchableOpacity>
 
-				<TouchableOpacity
-					style={styles.adminBtnContainer}
-					onPress={() => this.props.navigation.navigate("Emit")} >
-					<View style={styles.adminBtn}>
-						<Text style={styles.btnText}>
-							Admnistrador
+                {this.state.email === "admin@admin.com" ?
+                <TouchableOpacity
+                    style={styles.playBtn}
+                    onPress={() => this.props.navigation.navigate("Emit")} >
+                    <View >
+                        <Text style={styles.btnText}>
+                            Panel de admin
                         </Text>
-					</View>
-				</TouchableOpacity>
-				<TouchableOpacity style={styles.playBtn} onPress={this.signOutUser}>
-					<Text>Salir</Text>
-				</TouchableOpacity>
-			</View>
-		);
-	}
+                    </View>
+                </TouchableOpacity>  : false
+                } 
+
+                <TouchableOpacity style={styles.playBtn} onPress={this.signOutUser}>
+                    <Text>Salir</Text>
+                </TouchableOpacity>
+            </View>
+        );
+    }
 }
 
 
@@ -156,5 +160,8 @@ const styles = StyleSheet.create({
             borderRadius: 3,
             marginBottom:10
           
+    },name : {
+        fontSize : 30,
+        padding : 5
     }
 })

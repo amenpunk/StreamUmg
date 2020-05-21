@@ -49,7 +49,7 @@ export default class AddScreen extends Component {
             })
             .then(async les => {
                 console.debug(les);
-                // await fetch("http://40.122.152.174:3000/Restart")
+                await fetch("http://40.69.159.146:3002/Restart")
                 return this.props.navigation.navigate('Mess');
             });
     };
